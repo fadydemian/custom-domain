@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="myFunction('Hello!')">Click Me!</button>
+
+    <!-- Script tag to define JavaScript functions -->
+    <script>
+        // Function to be called when the button is clicked
+        function myFunction(text) {
+    const chatbaseButton = document.getElementById("chatbase-bubble-button");
+    chatbaseButton.click();
+
+    const chatbaseWindow = document.querySelector("#chatbase-bubble-window");
+    const iframe = chatbaseWindow.querySelector("iframe");
+
+    iframe.addEventListener('load', () => {
+        const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+
+        const observer = new MutationObserver((mutationsList, observer) => {
+            const mainWindow = iframeDocument.querySelector("main");
+            if (mainWindow) {
+                console.log("mainWindow found", mainWindow);
+                observer.disconnect(); // Stop observing once the main element is found
+
+                const textarea = mainWindow.querySelector("textarea");
+                const submitButton = mainWindow.querySelector("button[type='submit']");
+
+                if (textarea && submitButton) {
+                    console.log("textarea and submitButton found");
+                    textarea.value = text;
+                    submitButton.click();
+                }
+            }
+        });
+
+        observer.observe(iframeDocument, { childList: true, subtree: true });
+    });
+}
+    </script>
+ <script>
+    window.embeddedChatbotConfig = {
+    chatbotId: "bvK7a1kGFUP0HEVBIIsqZ",
+    domain: "chat.skyrocart.com"
+    }
+    </script>
+    <script
+    src="https://chat.skyrocart.com/embed.min.js"
+    chatbotId="bvK7a1kGFUP0HEVBIIsqZ"
+    domain="chat.skyrocart.com"
+    defer>
+    </script>
+</body>
+</html>
